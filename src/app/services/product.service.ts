@@ -9,13 +9,17 @@ import { map } from 'rxjs';
 })
 export class ProductService {
 
-  private baseUrl = 'http://localhost:8080/api/products?size=100';
+  private baseUrl = 'http://localhost:8080/api/products';
 
   constructor(private httpClient: HttpClient) { }
 
-  getProductList(): Observable<Product[]> {
-    return this.httpClient.get<GetResponse>(this.baseUrl).pipe(
-      map(response => response._embedded.products))
+  getProductList(categoryId: number): Observable<Product[]> {
+
+      // build URL based on category ID
+    const searchUrl = `${this.baseUrl}/search/findByCategoryId?id=${categoryId}`;
+
+    return this.httpClient.get<GetResponse>(searchUrl).pipe(
+      map(response => response._embedded.products));
   }
 }
 
